@@ -30,7 +30,7 @@ export function collide(square, obj) {
 
         react: function () {
             let tolerance = 0.1;
-            let botTol = 5;
+            let botTol = 10;
             //Bottom Touches
             if (Math.abs(s.bottom - o.top) >= 0 &&
                 (Math.abs(s.right - o.left) > botTol) && // It is not on the right
@@ -42,7 +42,7 @@ export function collide(square, obj) {
                 square.jumping = false;
 
                 // Top Touches
-            } else if (Math.abs(s.top - o.bottom) >= botTol &&
+            } else if (Math.abs(s.top - o.bottom) >= tolerance &&
                 (Math.abs(s.right - o.left) > botTol) &&
                 (Math.abs(s.left - o.right) > botTol) &&
                 Math.abs(s.oldTop - o.bottom) < botTol) {
