@@ -1,5 +1,4 @@
 "use strictt";
-// Looks a bit hacky but could be optimized I guess
 export function collide(square, obj) {
 
     let s = {
@@ -32,31 +31,34 @@ export function collide(square, obj) {
         react: function () {
             let tolerance = 0.1;
             let botTol = 5;
-            if (Math.abs(s.bottom - o.top) >= 0 && 
-            (Math.abs(s.right - o.left) > botTol) && 
-            (Math.abs(s.left - o.right) > botTol) && 
-            s.oldBot < o.top){
-                //Bottom Touches
+            //Bottom Touches
+            if (Math.abs(s.bottom - o.top) >= 0 &&
+                (Math.abs(s.right - o.left) > botTol) && // It is not on the right
+                (Math.abs(s.left - o.right) > botTol) &&  // It is not on the left
+                Math.abs(s.oldBot - o.top) < botTol) {
                 square.setBottom(o.top - tolerance);
-                square.speed.y = 0; // Gravity = 0
+                square.speed.y = obj.speed.y;
+                square.speed.x *= 0.9;
                 square.jumping = false;
-            }
-            // Top collision
-            else if (s.top <= o.bottom && s.oldTop > o.bottom) {
-                console.log('Top Touches');
-                square.setTop(o.bottom + tolerance);
-            }
-            else if(s.right >= o.left && s.oldRight < o.left){
-                // Right Touches
-                square.setRight(o.left - tolerance);
-                // square.position.x = o.left - square.size.w;
-            }
-            else if (s.left <= o.right && s.oldLeft > o.right){
-                // Left Touches
-                square.setLeft(o.right + tolerance);
-                // square.position.x = o.right;
-            }
 
+                // Top Touches
+            } else if (Math.abs(s.top - o.bottom) >= botTol &&
+                (Math.abs(s.right - o.left) > botTol) &&
+                (Math.abs(s.left - o.right) > botTol) &&
+                Math.abs(s.oldTop - o.bottom) < botTol) {
+                square.setTop(o.bottom + tolerance);
+                square.speed.y = obj.speed.y;
+
+                // Right Touches
+            } else if (Math.abs(s.right - o.left) <= botTol) {
+                square.setRight(o.left);
+                square.speed.x = obj.speed.x;
+                // Left Touches
+            } else if (Math.abs(s.left - o.right) <= botTol) {
+                square.setLeft(o.right);
+                square.speed.x = obj.speed.x;
+
+            }
         }
     }
 }
